@@ -11,14 +11,9 @@ import Modal from "../../components/Modal/Modal";
 import NoteForm from "../../components/NoteForm/NoteForm";
 import SearchBox from "../../components/SearchBox/SearchBox";
 
-interface Props {
-  initialPage: number;
-  initialSearch: string;
-}
-
-function NotesClient({ initialPage, initialSearch }: Props) {
-  const [page, setPage] = useState(initialPage);
-  const [query, setQuery] = useState(initialSearch);
+function NotesClient() {
+  const [page, setPage] = useState(1);
+  const [query, setQuery] = useState("");
   const [debouncedQuery] = useDebounce(query, 300);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -29,6 +24,7 @@ function NotesClient({ initialPage, initialSearch }: Props) {
     queryKey: ["notes", debouncedQuery, page],
     queryFn: () => fetchNotes(debouncedQuery, page),
     placeholderData: keepPreviousData,
+    refetchOnMount: false,
   });
 
   const handleSearch = (newValue: string) => {

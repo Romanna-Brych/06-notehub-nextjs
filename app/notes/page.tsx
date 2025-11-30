@@ -6,22 +6,15 @@ import {
 import NotesClient from "./Notes.client";
 import { fetchNotes } from "@/lib/api";
 
-interface Props {
-  searchParams?: { search?: string; page?: string };
-}
-
-async function Notes({ searchParams }: Props) {
-  const page = Number(searchParams?.page || 1);
-  const search = searchParams?.search || "";
-
+async function Notes() {
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
-    queryKey: ["notes", search, page],
-    queryFn: () => fetchNotes(search, page),
+    queryKey: ["notes", "", 1],
+    queryFn: () => fetchNotes("", 1),
   });
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <NotesClient initialPage={page} initialSearch={search} />
+      <NotesClient />
     </HydrationBoundary>
   );
 }
